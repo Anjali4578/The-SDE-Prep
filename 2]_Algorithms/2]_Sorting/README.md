@@ -11,6 +11,121 @@
 #### 🧮 Radix Sort [code](#rs)
 <br>
 
+<a id="t"></a>
+
+## <p aline="center">All Time⌚ & Space🗑️ Complexity</p>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- <title>Table</title> -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@500&display=swap" rel="stylesheet">
+    <!-- <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            font-family: 'Ubuntu', sans-serif;
+        }
+        th, td {
+            text-align: left;
+            padding: 8px;
+            text-align: center;
+        }
+        tr:nth-child(even){background-color: #f2f2f2}
+        th {
+            background-color: rgb(185, 119, 255);
+            color: white;
+        }
+        .redcolors {
+            color: red;
+        }
+    </style> -->
+</head>
+<body>
+    <table border="2" width="100%">
+        <tr>
+            <th rowspan="2">Algorithem</th>
+            <th colspan="3">Time Complexity</th>
+            <th rowspan="2">Worst Case space Complexity</th>
+        </tr>
+        <tr>
+            <th>Best</th>
+            <th>Average</th>
+            <th>Worst</th>
+        </tr>
+        <tr>
+            <td>Bubble Sort</td>
+            <td>O(n)</td>
+            <td>O(n^2)</td>
+            <td>O(n^2)</td>
+            <td>O(1)</td>
+        </tr>
+        <tr>
+            <td>Selection Sort</td>
+            <td>O(n^2)</td>
+            <td>O(n^2)</td>
+            <td>O(n^2)</td>
+            <td>O(1)</td>
+        </tr>
+        <tr>
+            <td>Insertion Sort</td>
+            <td>O(n)</td>
+            <td>O(n^2)</td>
+            <td>O(n^2)</td>
+            <td>O(1)</td>
+        </tr>
+        <tr>
+            <td>Merge Sort</td>
+            <td>O(n log n)</td>
+            <td>O(n log n)</td>
+            <td>O(n log n)</td>
+            <td>O(n)</td>
+        </tr>
+        <tr>
+            <td>Quick Sort</td>
+            <td>O(n log n)</td>
+            <td>O(n log n)</td>
+            <td>O(n^2)</td>
+            <td>O(n)</td>
+        </tr>
+        <tr>
+            <td>Heap Sort</td>
+            <td>O(n log n)</td>
+            <td>O(n log n)</td>
+            <td>O(n log n)</td>
+            <td>O(1)</td>
+        </tr>
+        <tr>
+            <td>Count Sort</td>
+            <td>O(n+k)</td>
+            <td>O(n+k)</td>
+            <td>O(n+k)</td>
+            <td>O(k)</td>
+        </tr>
+        <tr>
+            <td>Bucket Sort</td>
+            <td>O(n+k)</td>
+            <td>O(n+k)</td>
+            <td>O(n^2)</td>
+            <td>O(n)</td>
+        </tr>
+        <tr>
+            <td>Radix Sort</td>
+            <td>O(n*k)</td>
+            <td>O(n*k)</td>
+            <td>O(n*k)</td>
+            <td>O(n+k)</td>
+        </tr>
+    </table>
+</body>
+</html>
+
+
 ### If want to take list input
 ```python
 lst = list(map(int,input().split()))
@@ -74,11 +189,10 @@ print(lst)
 def InsertionSort(lst):
     n = len(lst)
     for i in range(1,n): # i(1 -> n-1)
-        for j in range(i-1,-1,-1): # j(i -> 0)
-            if(lst[j]>lst[j+1]):
-                lst[j],lst[j + 1] = lst[j + 1],lst[j]
-            else:
-                break
+        j = i
+        while j > 0 and lst[j - 1] > lst[j]:
+            lst[j - 1], lst[j] = lst[j], lst[j - 1]
+            j -= 1
 
 lst = [6,11,3,7,12,18,5,1]
 InsertionSort(lst)
@@ -110,6 +224,32 @@ step 3: perform merge function.
 step 4: Stop
 ```
 #### Code :
+```python
+class Solution:
+    def merge_two_sorted_lists(self, left: List[int], right: List[int], merged) -> List[int]:
+        leftIdx, rightIdx = 0, 0
+        while leftIdx < len(left) and rightIdx < len(right):
+            if left[leftIdx] < right[rightIdx]:
+                merged[leftIdx + rightIdx] = left[leftIdx]
+                leftIdx += 1
+            else:
+                merged[leftIdx + rightIdx] = right[rightIdx]
+                rightIdx += 1
+        if leftIdx < len(left):
+            merged[leftIdx+rightIdx:] = left[leftIdx:]
+        elif rightIdx < len(right):
+            merged[leftIdx + rightIdx:] = right[rightIdx:]
+        return merged
+
+    def sortArray(self, nums: List[int]) -> List[int]:
+        n = len(nums)
+        if n == 1:
+            return nums
+        return self.merge_two_sorted_lists(self.sortArray(nums[:n//2]), self.sortArray(nums[n//2:]), nums)
+
+t = Solution()
+print(t.merge_two_sorted_lists([1,3,5,6,7],[2,4],[11,2,11,41,5,16,73]))
+```
 ```python
 def merge_sort(lst):
     if len(lst) <= 1:
@@ -215,6 +355,28 @@ if __name__ == '__main__':
 <img src="Source\Quicksort.png" alt="" style="border: solid 5px rgb(56, 255, 189); width:300px">
 
 #### Code :
+```python
+def partion(listToMakePartion):
+    j = 0
+    p = listToMakePartion[-1]
+    for i in range(len(listToMakePartion)):
+        if(listToMakePartion[i]<=p):
+            listToMakePartion[i],listToMakePartion[j] = listToMakePartion[j],listToMakePartion[i]
+            j+=1
+    j-=1
+    return listToMakePartion,j
+
+def quickSort(lstToSort):
+    if(len(lstToSort)<=1):
+        return lstToSort
+    lstToSort,p = partion(lstToSort)
+    left = lstToSort[:p]
+    right = lstToSort[p+1:]
+
+    leftSorted = quickSort(left)
+    rightSorted = quickSort(right)
+    return leftSorted+[lstToSort[p]]+rightSorted
+```
 ```python
 def partition(lst,l,r):
     pi = lst[r]
@@ -416,117 +578,3 @@ Cocktail Sort
 Strand Sort -->
 <br>
 <br>
-<a id="t"></a>
-
-## <p aline="center">All Time⌚ & Space🗑️ Complexity</p>
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- <title>Table</title> -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@500&display=swap" rel="stylesheet">
-    <!-- <style>
-        table {
-            border-collapse: collapse;
-            width: 100%;
-            font-family: 'Ubuntu', sans-serif;
-        }
-        th, td {
-            text-align: left;
-            padding: 8px;
-            text-align: center;
-        }
-        tr:nth-child(even){background-color: #f2f2f2}
-        th {
-            background-color: rgb(185, 119, 255);
-            color: white;
-        }
-        .redcolors {
-            color: red;
-        }
-    </style> -->
-</head>
-<body>
-    <table border="2" width="100%">
-        <tr>
-            <th rowspan="2">Algorithem</th>
-            <th colspan="3">Time Complexity</th>
-            <th rowspan="2">Worst Case space Complexity</th>
-        </tr>
-        <tr>
-            <th>Best</th>
-            <th>Average</th>
-            <th>Worst</th>
-        </tr>
-        <tr>
-            <td>Bubble Sort</td>
-            <td>O(n)</td>
-            <td>O(n^2)</td>
-            <td>O(n^2)</td>
-            <td>O(1)</td>
-        </tr>
-        <tr>
-            <td>Selection Sort</td>
-            <td>O(n^2)</td>
-            <td>O(n^2)</td>
-            <td>O(n^2)</td>
-            <td>O(1)</td>
-        </tr>
-        <tr>
-            <td>Insertion Sort</td>
-            <td>O(n)</td>
-            <td>O(n^2)</td>
-            <td>O(n^2)</td>
-            <td>O(1)</td>
-        </tr>
-        <tr>
-            <td>Merge Sort</td>
-            <td>O(n log n)</td>
-            <td>O(n log n)</td>
-            <td>O(n log n)</td>
-            <td>O(n)</td>
-        </tr>
-        <tr>
-            <td>Quick Sort</td>
-            <td>O(n log n)</td>
-            <td>O(n log n)</td>
-            <td>O(n^2)</td>
-            <td>O(n)</td>
-        </tr>
-        <tr>
-            <td>Heap Sort</td>
-            <td>O(n log n)</td>
-            <td>O(n log n)</td>
-            <td>O(n log n)</td>
-            <td>O(1)</td>
-        </tr>
-        <tr>
-            <td>Count Sort</td>
-            <td>O(n+k)</td>
-            <td>O(n+k)</td>
-            <td>O(n+k)</td>
-            <td>O(k)</td>
-        </tr>
-        <tr>
-            <td>Bucket Sort</td>
-            <td>O(n+k)</td>
-            <td>O(n+k)</td>
-            <td>O(n^2)</td>
-            <td>O(n)</td>
-        </tr>
-        <tr>
-            <td>Radix Sort</td>
-            <td>O(n*k)</td>
-            <td>O(n*k)</td>
-            <td>O(n*k)</td>
-            <td>O(n+k)</td>
-        </tr>
-    </table>
-</body>
-</html>
-
